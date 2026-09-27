@@ -8,7 +8,7 @@
 .\build.ps1
 ```
 
-脚本编译 x64 WinForms 主程序、纯本地协议测试程序和只读 WMI 检查程序。主程序输出到 `dist/OmenUndervolt.exe`；如果同名程序正在运行，则输出 `dist/OmenUndervolt.next.exe`，避免覆盖运行中的文件。生成的检查程序位于 `tests/artifacts/`。
+脚本编译 x64 WinForms 主程序、纯本地协议测试程序和只读 WMI 检查程序。版本信息来自 `src/AssemblyInfo.cs`，由编译器写入 EXE。主程序输出到 `dist/OmenUndervolt.exe`；如果同名程序正在运行，则输出 `dist/OmenUndervolt.next.exe`，避免覆盖运行中的文件。生成的检查程序位于 `tests/artifacts/`。
 
 纯本地协议／界面检查可运行：
 

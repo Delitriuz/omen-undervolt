@@ -15,6 +15,10 @@
 ## 免责声明
 
 本工具不是 HP 官方软件，OMEN 是 HP 的商标。它通过 HP BIOS WMI 接口写入处理器电压偏移，该写入路径尚未在实机验证；降压可能导致系统不稳定，请自行评估风险并承担使用后果。
+
+## 许可证
+
+[MIT](LICENSE)。
 ## Code Wiki
 
 源码结构、WMI 流程、安全边界和构建说明见 [Code Wiki](docs/README.md)。

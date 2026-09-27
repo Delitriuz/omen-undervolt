@@ -22,6 +22,7 @@ $references = @(
     '/reference:System.Windows.Forms.dll'
 )
 $appSources = @(
+    (Join-Path $source 'AssemblyInfo.cs'),
     (Join-Path $source 'Program.cs'),
     (Join-Path $source 'HpBiosWmi.cs'),
     (Join-Path $source 'SafetyProtocol.cs')
