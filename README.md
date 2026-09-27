@@ -1,4 +1,4 @@
-# OMEN 本机降压工具
+# OMEN 降压工具
 
 面向 HP OMEN 的 Intel 机型。使用 Windows 自带 .NET Framework 4.8 WinForms 和 HP BIOS WMI 接口，不调用 OGH。是否需要机型限制交给 BIOS 的能力查询判断，同系列其它 OMEN 机型也可以尝试。需要保留 HP BIOS WMI/ACPI 驱动。
 

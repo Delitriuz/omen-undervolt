@@ -111,13 +111,13 @@ internal static class ProtocolTests
     {
         using (MainForm form = new MainForm())
         {
-            Equal("OMEN 本机降压工具", form.Text, "窗口标题");
+            Equal("OMEN 降压工具", form.Text, "窗口标题");
             True(form.Icon != null, "窗口图标已加载");
             PictureBox logo = Descendants(form).OfType<PictureBox>().Single();
             True(logo.Image != null, "界面图标已加载");
             Equal((byte)0, ((System.Drawing.Bitmap)logo.Image).GetPixel(0, 0).A, "界面图标透明背景");
             Equal(FormBorderStyle.Sizable, form.FormBorderStyle, "窗口可调整大小");
-            Label heading = Descendants(form).OfType<Label>().Single(label => label.Text == "OMEN 本机降压工具");
+            Label heading = Descendants(form).OfType<Label>().Single(label => label.Text == "OMEN 降压工具");
             Label unit = Descendants(form).OfType<Label>().Single(label => label.Text == "mV");
             True(heading.Height >= heading.GetPreferredSize(System.Drawing.Size.Empty).Height, "主标题高度足够");
             True(unit.Width >= unit.GetPreferredSize(System.Drawing.Size.Empty).Width, "单位宽度足够");
@@ -125,7 +125,7 @@ internal static class ProtocolTests
             NumericUpDown input = Descendants(form).OfType<NumericUpDown>().Single();
             // 使用 Windows 自带控件：分组框、标签、滑块和数值框，不做自绘。
             True(Descendants(form).OfType<GroupBox>().Count() >= 3, "使用系统分组框");
-            True(Descendants(form).OfType<Label>().Any(label => label.Text == "正在检查本机配置…"), "分组框显示设备行");
+            True(Descendants(form).OfType<Label>().Any(label => label.Text == "正在读取设备信息…"), "分组框显示设备行");
             True(Descendants(form).OfType<Label>().Any(label => label.Text == "正在读取 HP BIOS 降压接口…"), "分组框显示状态行");
             Equal(0, slider.Minimum, "滑块下限");
             Equal(200, slider.Maximum, "滑块上限");

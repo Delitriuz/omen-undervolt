@@ -44,7 +44,7 @@ namespace OmenUndervolt
         internal MainForm()
         {
             SuspendLayout();
-            Text = "OMEN 本机降压工具";
+            Text = "OMEN 降压工具";
             Icon = LoadLogoIcon();
             Font = SystemFonts.MessageBoxFont;
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -80,7 +80,7 @@ namespace OmenUndervolt
                 TabStop = false
             };
             TableLayoutPanel heading = CreateTable(1);
-            Label title = CreateLabel("OMEN 本机降压工具");
+            Label title = CreateLabel("OMEN 降压工具");
             title.Font = new Font(Font.FontFamily, 12F, FontStyle.Regular);
             title.Margin = new Padding(0, 0, 0, 2);
             Label subtitle = CreateLabel("处理器电压偏移 · HP BIOS 固件接口");
@@ -93,7 +93,7 @@ namespace OmenUndervolt
 
             GroupBox statusGroup = CreateGroup("设备状态");
             TableLayoutPanel statusLayout = CreateTable(1);
-            deviceModel = CreateLabel("正在检查本机配置…");
+            deviceModel = CreateLabel("正在读取设备信息…");
             deviceDetail = CreateLabel("读取处理器与固件信息");
             deviceDetail.ForeColor = SystemColors.GrayText;
             firmwareStatus = CreateLabel("正在读取 HP BIOS 降压接口…");
@@ -219,7 +219,7 @@ namespace OmenUndervolt
             catch (Exception exception)
             {
                 deviceModel.Text = "设备检查失败";
-                deviceDetail.Text = "无法读取本机型号与固件信息。";
+                deviceDetail.Text = "无法读取设备型号与固件信息。";
                 SetFirmwareStatus(exception.Message, true);
                 SetWriteControlsEnabled(false);
             }

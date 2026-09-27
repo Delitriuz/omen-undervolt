@@ -1,4 +1,4 @@
-# OMEN 本机降压工具 · Code Wiki
+# OMEN 降压工具 · Code Wiki
 
 本 Wiki 根据当前源码整理，帮助理解代码入口、BIOS 通信路径、安全限制和构建方式。
 
