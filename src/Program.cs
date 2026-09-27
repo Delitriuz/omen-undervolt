@@ -36,7 +36,6 @@ namespace OmenUndervolt
         private readonly Button refreshButton;
         private readonly Button applyButton;
         private readonly Button resetButton;
-        private bool supportedTarget;
         private bool firmwareReady;
         private bool loading;
         private string pendingOffset;
@@ -213,7 +212,6 @@ namespace OmenUndervolt
                 DeviceInfo device = ReadDeviceInfo();
                 deviceModel.Text = string.IsNullOrWhiteSpace(device.Model) ? "未知型号" : device.Model.Trim();
                 deviceDetail.Text = DeviceDetail(device);
-                supportedTarget = SafetyProtocol.IsSupportedTarget(device);
                 RefreshFirmwareState();
             }
             catch (Exception exception)
@@ -242,12 +240,10 @@ namespace OmenUndervolt
                 currentValue.Text = FormatOffset(offset);
                 SetMagnitude(SafetyProtocol.GetSliderMagnitude(offset));
                 firmwareReady = true;
-                if (!supportedTarget)
-                    SetFirmwareStatus("非 HP OMEN Intel 机型，写入已禁用；仅可读取当前偏移。", true);
-                else if (pendingOffset != null)
+                if (pendingOffset != null)
                     SetFirmwareStatus("BIOS 已接受 " + pendingOffset + " 请求；重启后才能复核。", false);
                 else
-                    SetFirmwareStatus("HP BIOS 已报告支持降压；写入后需要重启复核。", false);
+                    SetFirmwareStatus("BIOS 已报告支持降压；写入后需要重启复核。", false);
             }
             catch (Exception exception)
             {
@@ -322,7 +318,7 @@ namespace OmenUndervolt
         /// <summary>能力查询通过且当前偏移读取成功，才允许写入。</summary>
         private bool CanWrite
         {
-            get { return supportedTarget && firmwareReady; }
+            get { return firmwareReady; }
         }
 
         private void SetWriteControlsEnabled(bool enabled)
@@ -359,7 +355,6 @@ namespace OmenUndervolt
         {
             return new DeviceInfo
             {
-                Manufacturer = ReadWmiProperty("Win32_ComputerSystem", "Manufacturer"),
                 Model = ReadWmiProperty("Win32_ComputerSystem", "Model"),
                 Board = ReadWmiProperty("Win32_BaseBoard", "Product"),
                 Processor = ReadWmiProperty("Win32_Processor", "Name"),

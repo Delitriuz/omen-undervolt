@@ -1,8 +1,8 @@
 # OMEN 降压工具
 
-面向 HP OMEN 的 Intel 机型。使用 Windows 自带 .NET Framework 4.8 WinForms 和 HP BIOS WMI 接口，不调用 OGH。是否需要机型限制交给 BIOS 的能力查询判断，同系列其它 OMEN 机型也可以尝试。需要保留 HP BIOS WMI/ACPI 驱动。
+面向带 HP BIOS WMI 接口的 HP 笔记本，OMEN 之外的机型也可以试。使用 Windows 自带 .NET Framework 4.8 WinForms，直接调用 HP BIOS WMI 接口，不调用 OGH。程序不做机型白名单，能不能用完全由 BIOS 的能力查询决定；不支持时界面会说明原因，不会静默失败。需要保留 HP BIOS WMI/ACPI 驱动。
 
-> English: a small Windows tool that sets the CPU voltage offset (undervolt) on HP OMEN Intel laptops through the HP BIOS WMI interface. Use it alongside OmenSuperHub (OSH) — OSH handles power limits and fan curves, this tool handles the voltage offset.
+> English: a small Windows tool that sets the CPU voltage offset (undervolt) through the HP BIOS WMI interface, on HP laptops whose BIOS reports support. Use it alongside OmenSuperHub (OSH) — OSH handles power limits and fan curves, this tool handles the voltage offset.
 
 以 Windows PowerShell 运行 `.\build.ps1` 编译。主程序通常位于 `dist\OmenUndervolt.exe`；若旧版程序仍在运行，构建脚本会生成 `dist\OmenUndervolt.next.exe`，避免覆盖正在使用的文件。启动时会请求管理员权限。程序会显示当前处理器电压偏移，并提供 0–200 mV 降压幅度、读取、设置和恢复 0 mV。写入需二次确认，BIOS 接受请求后可选择立即重启或稍后重启；立即重启使用 Windows 正常重启，不强制关闭应用。
 
@@ -10,7 +10,7 @@
 
 窗口和 EXE 图标使用透明背景的 OMEN 徽标，在左上角加入代表负电压的负号与向下箭头。原始矢量图和 PNG 保留在 `assets` 中，来源为 [HP OMEN 标志存档](https://commons.wikimedia.org/wiki/File:HP_Omen_logo.svg)，该页面注明原始来源为 HP；OMEN 为 HP 商标，本工具不是 HP 官方软件。
 
-程序先确认设备是 HP OMEN 的 Intel 机型，再用 HP BIOS 的能力查询判断是否支持降压。非 HP OMEN Intel 机型、能力查询未报告支持、当前偏移读取失败，或 WMI 接口与驱动不可用时，界面会显示对应原因并禁用写入；机型、主板和 BIOS 版本不再参与限制。当前 WMI 写入路径尚未实机验证。
+程序不做机型判断，直接读设备信息并调用 HP BIOS WMI 接口。WMI 接口不存在或驱动缺失、`0x35` 能力查询未报告支持、`0x36` 读取当前偏移失败时，界面会显示对应原因并禁用写入；厂商、机型、主板、BIOS 和处理器都不参与限制。当前 WMI 写入路径尚未实机验证。
 
 运行 `.\tests\artifacts\ProtocolTests.exe` 执行纯本地协议和设备校验测试；测试不会访问 WMI 或修改固件。
 

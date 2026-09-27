@@ -18,7 +18,6 @@ internal static class ProtocolTests
         TestDecode();
         TestSliderMapping();
         TestRangeValidation();
-        TestTargetValidation();
         TestCapabilityValidation();
         TestMainForm();
         TestInitialization();
@@ -64,47 +63,16 @@ internal static class ProtocolTests
         Equal(0, SafetyProtocol.GetSliderMagnitude(40), "正偏移不映射为降压幅度");
     }
 
-    private static void TestTargetValidation()
-    {
-        // 只按厂商、产品线和处理器粗筛；机型、主板与 BIOS 版本不再参与判断。
-        DeviceInfo target = new DeviceInfo
-        {
-            Manufacturer = "HP",
-            Model = "OMEN by HP Gaming Laptop 16-wf0xxx",
-            Board = "8BAB",
-            Processor = "13th Gen Intel(R) Core(TM) i5-13500HX",
-            BiosVersion = "F.30"
-        };
-        True(SafetyProtocol.IsSupportedTarget(target), "HP OMEN Intel 机型通过");
-
-        target.Board = "8BAA";
-        target.BiosVersion = "F.99";
-        target.Model = "OMEN by HP Gaming Laptop 16-xf0xxx";
-        True(SafetyProtocol.IsSupportedTarget(target), "其它 OMEN 机型与 BIOS 版本同样通过");
-
-        target.Manufacturer = "Hewlett-Packard";
-        True(SafetyProtocol.IsSupportedTarget(target), "Hewlett-Packard 厂商名通过");
-
-        target.Manufacturer = "Dell Inc.";
-        True(!SafetyProtocol.IsSupportedTarget(target), "非 HP 厂商拒绝写入");
-
-        target.Manufacturer = "HP";
-        target.Model = "HP ProBook 450 G10";
-        True(!SafetyProtocol.IsSupportedTarget(target), "非 OMEN 机型拒绝写入");
-
-        target.Model = "OMEN by HP Gaming Laptop 16-wf0xxx";
-        target.Processor = "AMD Ryzen 9 7940HS";
-        True(!SafetyProtocol.IsSupportedTarget(target), "AMD 处理器拒绝写入");
-
-        True(!SafetyProtocol.IsSupportedTarget(null), "空设备信息拒绝写入");
-    }
-
     private static void TestCapabilityValidation()
     {
-        True(SafetyProtocol.IsUndervoltingAvailable(new byte[] { 0, 0, 1, 0 }), "支持值 1");
-        True(SafetyProtocol.IsUndervoltingAvailable(new byte[] { 0, 0, 2, 0 }), "支持值 2");
+        // 第 3 字节按位判断：bit 0 表示支持降压，实机见过 0x03。
+        True(SafetyProtocol.IsUndervoltingAvailable(new byte[] { 0, 0, 1, 0 }), "能力值 0x01");
+        True(SafetyProtocol.IsUndervoltingAvailable(new byte[] { 0, 0, 3, 0 }), "能力值 0x03");
+        True(SafetyProtocol.IsUndervoltingAvailable(new byte[] { 0, 0, 0x21, 0 }), "能力值 0x21");
         True(!SafetyProtocol.IsUndervoltingAvailable(new byte[] { 0, 0, 0, 0 }), "不支持值");
+        True(!SafetyProtocol.IsUndervoltingAvailable(new byte[] { 0, 0, 2, 0 }), "仅有其它标志位");
         True(!SafetyProtocol.IsUndervoltingAvailable(new byte[] { 0, 0 }), "短能力数据");
+        True(!SafetyProtocol.IsUndervoltingAvailable(null), "空能力数据");
     }
 
     private static void TestMainForm()
